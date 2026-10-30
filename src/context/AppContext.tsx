@@ -18,7 +18,7 @@ interface AppContextType {
   adminMetrics: AdminMetrics | null;
   toasts: ToastMessage[];
 
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<UserProfile>;
   signup: (payload: { email: string; password: string; role: string; name: string; organizationName?: string; organizationDetails?: any }) => Promise<void>;
   register: (payload: { email: string; password: string; role: string; name: string; organizationDetails?: any }) => Promise<void>;
   logout: () => void;
@@ -81,15 +81,6 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   useEffect(() => {
     async function loadCurrentUser() {
       if (!token) {
-        // Auto-login with default Chef account so the app starts populated and functional immediately
-        try {
-          const res = await api.auth.login({ email: 'chef@grandhotel.com', password: 'password123' });
-          localStorage.setItem('nourishnet_jwt_token', res.token);
-          setToken(res.token);
-          setCurrentUser(res.user);
-        } catch (err) {
-          console.warn('Initial auto-login fallback skipped:', err);
-        }
         return;
       }
       try {
@@ -247,12 +238,13 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   }, [currentUser, addToast]);
 
   // Auth actions
-  const login = async (email: string, pass: string) => {
+  const login = async (email: string, pass: string): Promise<UserProfile> => {
     const res = await api.auth.login({ email, password: pass });
     localStorage.setItem('nourishnet_jwt_token', res.token);
     setToken(res.token);
     setCurrentUser(res.user);
     addToast('Authentication Successful', `Welcome back, ${res.user.name}!`, 'success');
+    return res.user;
   };
 
   const signup = async (payload: { email: string; password: string; role: string; name: string; organizationName?: string; organizationDetails?: any }) => {

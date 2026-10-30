@@ -147,9 +147,9 @@ export const ConfirmPickupModal: React.FC<ConfirmPickupModalProps> = ({
             <button
               type="submit"
               disabled={!temperatureCheck || !packagingCheck}
-              className={`px-5 py-2 text-xs font-bold text-white rounded-lg shadow-xs transition-colors flex items-center gap-1.5 ${
+              className={`px-5 py-2.5 text-xs font-bold text-white rounded-xl shadow-xs transition-colors flex items-center gap-1.5 ${
                 temperatureCheck && packagingCheck
-                  ? 'bg-emerald-600 hover:bg-emerald-700 cursor-pointer'
+                  ? 'bg-[#059669] hover:bg-[#047857] cursor-pointer'
                   : 'bg-slate-300 cursor-not-allowed'
               }`}
             >

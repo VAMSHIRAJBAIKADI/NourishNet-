@@ -248,7 +248,7 @@ export const ListingDetailModal: React.FC<ListingDetailModalProps> = ({
                 onClose();
                 onRequestDonation(listing);
               }}
-              className="px-5 py-2 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer"
+              className="px-5 py-2.5 text-xs font-bold text-white bg-[#059669] hover:bg-[#047857] rounded-xl shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer"
             >
               <HeartHandshake className="w-4 h-4" />
               <span>Request This Food Donation</span>

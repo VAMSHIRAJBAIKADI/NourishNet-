@@ -111,7 +111,7 @@ export async function login(req: AuthenticatedRequest, res: Response) {
 
     const user = await db.findUserByEmail(email);
     if (!user) {
-      res.status(401).json({ error: 'Invalid email or password.' });
+      res.status(401).json({ error: 'Invalid email or password. Please try again.' });
       return;
     }
 
@@ -128,7 +128,7 @@ export async function login(req: AuthenticatedRequest, res: Response) {
     }
 
     if (!isMatch) {
-      res.status(401).json({ error: 'Invalid email or password.' });
+      res.status(401).json({ error: 'Invalid email or password. Please try again.' });
       return;
     }
 
