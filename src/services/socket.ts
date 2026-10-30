@@ -1,6 +1,7 @@
 import { io, Socket } from 'socket.io-client';
 
 const API_BASE_URL = (import.meta.env.VITE_API_URL || 'https://nourishnet-56.onrender.com').replace(/\/$/, '');
+console.log("USING API URL:", API_BASE_URL);
 
 let socket: Socket | null = null;
 
