@@ -28,7 +28,11 @@ export async function createRequest(req: AuthenticatedRequest, res: Response) {
       return;
     }
 
-    const recipient = await db.findUserById(req.user.userId);
+    const userId = req.user.userId || req.user.id || '';
+    let recipient = await db.findUserById(userId);
+    if (!recipient && req.user.email) {
+      recipient = await db.findUserByEmail(req.user.email);
+    }
     if (!recipient) {
       res.status(404).json({ error: 'Recipient account not found.' });
       return;
@@ -55,7 +59,9 @@ export async function createRequest(req: AuthenticatedRequest, res: Response) {
       return;
     }
 
-    if (listing.status !== 'AVAILABLE') {
+    // Explicitly allow listings with 'AVAILABLE' or 'LIVE' status to be requested
+    const isAvailableForRequest = listing.status === 'AVAILABLE' || listing.status === 'LIVE';
+    if (!isAvailableForRequest) {
       res.status(400).json({ error: `Listing is not available for requests (Status: ${listing.status}).` });
       return;
     }

@@ -109,7 +109,7 @@ export interface AdminMetrics {
   flaggedListingsCount: number;
 }
 
-const API_BASE_URL = (import.meta.env.VITE_API_URL || 'https://nourishnet-56.onrender.com').replace(/\/$/, '');
+const API_BASE_URL = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
 const getAuthHeaders = (): HeadersInit => {
   const token = localStorage.getItem('nourishnet_jwt_token');
   const headers: HeadersInit = {
