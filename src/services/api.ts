@@ -109,6 +109,7 @@ export interface AdminMetrics {
   flaggedListingsCount: number;
 }
 
+const API_BASE_URL = (import.meta.env.VITE_API_URL || 'https://nourishnet-56.onrender.com').replace(/\/$/, '');
 const getAuthHeaders = (): HeadersInit => {
   const token = localStorage.getItem('nourishnet_jwt_token');
   const headers: HeadersInit = {
@@ -131,7 +132,7 @@ async function handleResponse<T>(res: Response): Promise<T> {
 export const api = {
   auth: {
     async signup(payload: { email: string; password: string; role: string; name: string; organizationName?: string; organizationDetails?: any }) {
-      const res = await fetch('/api/auth/signup', {
+      const res = await fetch(`${API_BASE_URL}/api/auth/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -140,7 +141,7 @@ export const api = {
     },
 
     async register(payload: { email: string; password: string; role: string; name: string; organizationDetails?: any }) {
-      const res = await fetch('/api/auth/register', {
+      const res = await fetch(`${API_BASE_URL}/api/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -149,7 +150,7 @@ export const api = {
     },
 
     async login(payload: { email: string; password: string }) {
-      const res = await fetch('/api/auth/login', {
+      const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -158,7 +159,7 @@ export const api = {
     },
 
     async getMe() {
-      const res = await fetch('/api/auth/me', {
+      const res = await fetch(`${API_BASE_URL}/api/auth/me`, {
         headers: getAuthHeaders()
       });
       return handleResponse<{ user: UserProfile }>(res);
@@ -174,14 +175,14 @@ export const api = {
       if (params?.donorId) query.append('donorId', params.donorId);
       if (params?.role) query.append('role', params.role);
 
-      const res = await fetch(`/api/listings?${query.toString()}`, {
+      const res = await fetch(`${API_BASE_URL}/api/listings?${query.toString()}`, {
         headers: getAuthHeaders()
       });
       return handleResponse<{ listings: ApiListing[] }>(res);
     },
 
     async create(payload: Partial<ApiListing> | any) {
-      const res = await fetch('/api/listings', {
+      const res = await fetch(`${API_BASE_URL}/api/listings`, {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify(payload)
@@ -190,7 +191,7 @@ export const api = {
     },
 
     async withdraw(id: string) {
-      const res = await fetch(`/api/listings/${id}/withdraw`, {
+      const res = await fetch(`${API_BASE_URL}/api/listings/${id}/withdraw`, {
         method: 'POST',
         headers: getAuthHeaders()
       });
@@ -198,7 +199,7 @@ export const api = {
     },
 
     async updateStatus(id: string, status: string, flagReason?: string) {
-      const res = await fetch(`/api/listings/${id}/status`, {
+      const res = await fetch(`${API_BASE_URL}/api/listings/${id}/status`, {
         method: 'PATCH',
         headers: getAuthHeaders(),
         body: JSON.stringify({ status, flagReason })
@@ -209,14 +210,14 @@ export const api = {
 
   claims: {
     async getAll() {
-      const res = await fetch('/api/claims', {
+      const res = await fetch(`${API_BASE_URL}/api/claims`, {
         headers: getAuthHeaders()
       });
       return handleResponse<{ claims: ApiClaim[] }>(res);
     },
 
     async create(payload: { listing_id: string; notes?: string; requestedMeals?: number; pickupVolunteer?: string }) {
-      const res = await fetch('/api/claims', {
+      const res = await fetch(`${API_BASE_URL}/api/claims`, {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify(payload)
@@ -227,7 +228,7 @@ export const api = {
 
   requests: {
     async getAll() {
-      const res = await fetch('/api/requests', {
+      const res = await fetch(`${API_BASE_URL}/api/requests`, {
         headers: getAuthHeaders()
       });
       return handleResponse<{ requests: ApiRequest[] }>(res);
@@ -242,7 +243,7 @@ export const api = {
       pickupTime?: string;
       notes?: string;
     }) {
-      const res = await fetch('/api/requests', {
+      const res = await fetch(`${API_BASE_URL}/api/requests`, {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify(payload)
@@ -251,7 +252,7 @@ export const api = {
     },
 
     async update(id: string, payload: { status: string; rejectionReason?: string; notes?: string }) {
-      const res = await fetch(`/api/requests/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/requests/${id}`, {
         method: 'PATCH',
         headers: getAuthHeaders(),
         body: JSON.stringify(payload)
@@ -262,28 +263,28 @@ export const api = {
 
   admin: {
     async getMetrics() {
-      const res = await fetch('/api/admin/metrics', {
+      const res = await fetch(`${API_BASE_URL}/api/admin/metrics`, {
         headers: getAuthHeaders()
       });
       return handleResponse<{ metrics: AdminMetrics }>(res);
     },
 
     async getAuditLogs() {
-      const res = await fetch('/api/admin/audit-logs', {
+      const res = await fetch(`${API_BASE_URL}/api/admin/audit-logs`, {
         headers: getAuthHeaders()
       });
       return handleResponse<{ auditLogs: ApiAuditLog[] }>(res);
     },
 
     async getOrganizations() {
-      const res = await fetch('/api/admin/organizations', {
+      const res = await fetch(`${API_BASE_URL}/api/admin/organizations`, {
         headers: getAuthHeaders()
       });
       return handleResponse<{ organizations: UserProfile[] }>(res);
     },
 
     async verifyOrganization(userId: string, status: string, notes?: string) {
-      const res = await fetch(`/api/admin/verifications/${userId}`, {
+      const res = await fetch(`${API_BASE_URL}/api/admin/verifications/${userId}`, {
         method: 'PATCH',
         headers: getAuthHeaders(),
         body: JSON.stringify({ status, notes })
@@ -292,7 +293,7 @@ export const api = {
     },
 
     async deleteListing(id: string, reason?: string) {
-      const res = await fetch(`/api/admin/listings/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/admin/listings/${id}`, {
         method: 'DELETE',
         headers: getAuthHeaders(),
         body: JSON.stringify({ reason })
@@ -303,7 +304,7 @@ export const api = {
 
   system: {
     async getHealth() {
-      const res = await fetch('/api/health');
+      const res = await fetch(`${API_BASE_URL}/api/health`);
       return handleResponse<{
         status: string;
         database: string;
