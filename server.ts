@@ -7,7 +7,7 @@ import { promisify } from 'util';
 import { createServer as createViteServer } from 'vite';
 
 const execAsync = promisify(exec);
-import { initSocketIO } from './server/socket';
+import { initSocketIO } from './server/socket.ts';
 import { signup, register, login, getMe } from './server/controllers/authController';
 import {
   getListings,
